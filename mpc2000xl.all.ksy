@@ -329,10 +329,20 @@ types:
       - size: 6
   bar:
     seq:
-      - id: start_tick
-        type: b24
       - id: ticks_per_beat
         type: u1
+      - id: last_tick
+        type: b24
+    params:
+      - id: idx
+        type: s4
+    instances:
+      first_tick:
+        value: idx == 0 ? 0 : _parent.bars[idx - 1].last_tick
+      numerator:
+        value: (last_tick - first_tick) / ticks_per_beat
+      denominator:
+        value: 4 / (ticks_per_beat / 96)
 
   tracks:
     seq:
@@ -583,18 +593,18 @@ types:
       - id: tracks
         type: tracks
         
-      - size: 3584
+      - size: 3587
 
       - id: bars
-        type: bar
+        type: bar(_index)
         repeat: expr
-        repeat-expr: bar_count + 1
+        repeat-expr: bar_count
       
-      - type: bar
+      - type: bar(_index)
         repeat: expr
-        repeat-expr: (999 - bar_count) - 1
+        repeat-expr: 999 - bar_count
         
-      - size: 4452 - 3584
+      - size: 865
       
       - id: events
         type: event
@@ -1056,3 +1066,4 @@ enums:
     0: a
     1: b
     2: a_and_b
+    
