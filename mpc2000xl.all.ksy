@@ -4,6 +4,16 @@ meta:
   bit-endian: le
 
 types:
+  song_global:
+    seq:
+      - id: default_song_name
+        type: str
+        encoding: ASCII
+        size: 16
+      - id: ignore_tempo_change_events_in_sequence
+        type: b1
+      - type: b7
+
   track_status:
     seq:
       - id: unused_or_used
@@ -652,12 +662,10 @@ seq:
   - id: midi_sync
     type: midi_sync
   
-  - id: default_song_name
-    type: str
-    encoding: ASCII
-    size: 16
+  - id: song_global
+    type: song_global
   
-  - size: 42
+  - size: 41
   
   - id: misc
     type: misc
