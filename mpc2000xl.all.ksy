@@ -132,7 +132,10 @@ types:
       - id: timing_correct
         type: u1
         enum: timing_correct
-      - size: 1
+      - id: time_display_style
+        type: b1
+        enum: time_display_style
+      - type: b7
       - id: second_sequence_enabled
         type: b1
       - type: b7
@@ -678,6 +681,9 @@ seq:
     repeat: eos
 
 enums:
+  time_display_style:
+    0: bar_beat_clock
+    1: hour_minute_sec
   mixer_event_param:
     1: stereo_level
     2: stereo_pan
