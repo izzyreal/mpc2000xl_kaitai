@@ -280,9 +280,13 @@ types:
       - id: send_mmc_enabled
         type: b1
       - type: b7
+      
+      # Also used in Time Display window, as in, there's
+      # no separate entry for that one.
       - id: frame_rate
         type: u1
         enum: frame_rate
+        
       - id: input
         type: u1
       - id: output
