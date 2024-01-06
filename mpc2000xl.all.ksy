@@ -620,8 +620,12 @@ types:
       - id: loop_end_bar_index
         type: u2le # 0xff 0xff / 65535 means END
       - size: 12
+      
+      # Seems to be a duplicate of last_tick, but it's
+      # unclear if it's used for anything else.
       - id: last_tick2
         type: u4le
+      
       - size: 52
       - id: device_names
         type: str
