@@ -123,7 +123,12 @@ types:
       - size: 1
       - id: active_track
         type: u1
-      - size: 4
+      - size: 1
+      - id: master_tempo
+        type: u2le
+      - id: tempo_source_is_sequence
+        type: b1
+      - type: b7
       - id: timing_correct
         type: u1
         enum: timing_correct
