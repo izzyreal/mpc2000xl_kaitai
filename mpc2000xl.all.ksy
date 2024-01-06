@@ -188,9 +188,14 @@ types:
           min: 1
           max: 127
           
+  midi_output:
+    seq:
+      - id: soft_thru_mode
+        type: u1
+        enum: soft_thru_mode
+          
   midi_input:
     seq:
-      - size: 1
       - id: receive_channel
         type: u1
         enum: midi_input_receive_channel
@@ -638,10 +643,11 @@ seq:
   - id: count
     type: count
     
+  - id: midi_output
+    type: midi_output
+  
   - id: midi_input
     type: midi_input
-  
-  - size: 0
   
   - id: midi_sync
     type: midi_sync
@@ -681,6 +687,12 @@ seq:
     repeat: eos
 
 enums:
+  soft_thru_mode:
+    0: off
+    1: as_track
+    2: omni_a
+    3: omni_b
+    4: omni_ab
   time_display_style:
     0: bar_beat_clock
     1: hour_minute_sec
