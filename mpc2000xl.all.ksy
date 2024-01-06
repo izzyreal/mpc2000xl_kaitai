@@ -323,7 +323,10 @@ types:
       - size: 2
       - id: is_used
         type: b1
-      - size: 2
+      - id: loop_first_step
+        type: u1
+      - id: loop_last_step
+        type: u1
       - id: is_loop_enabled
         type: b1
       - size: 6
