@@ -4,6 +4,15 @@ meta:
   bit-endian: le
 
 types:
+  location:
+    seq:
+      - id: bar
+        type: u2le
+      - id: beat
+        type: u1
+      - id: clock
+        type: u1
+
   song_global:
     seq:
       - id: default_song_name
@@ -665,7 +674,12 @@ seq:
   - id: song_global
     type: song_global
   
-  - size: 41
+  - size: 5
+  
+  - id: locations
+    type: location
+    repeat: expr
+    repeat-expr: 9
   
   - id: misc
     type: misc
