@@ -602,6 +602,19 @@ types:
         if: name_part_1 != "" and name_part_2 != ""
 
   sequence_body:
+    types:
+      start_time:
+        seq:
+          - id: hours
+            type: u1
+          - id: minutes
+            type: u1
+          - id: seconds
+            type: u1
+          - id: frames
+            type: u1
+          - id: frame_decimals
+            type: u1
     seq:
       - id: is_used
         type: u2le
@@ -619,7 +632,10 @@ types:
         type: u2le
       - id: loop_end_bar_index
         type: u2le # 0xff 0xff / 65535 means END
-      - size: 12
+      - size: 1
+      - id: start_time
+        type: start_time
+      - size: 6
       
       # Seems to be a duplicate of last_tick, but it's
       # unclear if it's used for anything else.
