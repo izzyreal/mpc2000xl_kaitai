@@ -635,7 +635,9 @@ types:
         type: u2le
       - id: loop_end_bar_index
         type: u2le # 0xff 0xff / 65535 means END
-      - size: 1
+      - id: loop_enabled
+        type: b1
+      - type: b7
       - id: start_time
         type: start_time
       - size: 6
