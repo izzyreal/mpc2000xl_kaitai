@@ -12,6 +12,9 @@ types:
         type: u1
       - id: clock
         type: u1
+    instances:
+      display_value:
+        value: (bar > 98 ? (bar+1).as<str> : bar > 8 ? "0" + (bar+1).as<str> : "00" + (bar+1).as<str>) + "." + (beat > 8 ? (beat+1).as<str> : "0" + (beat+1).as<str>) + "." + (clock > 9 ? clock.as<str> : "0" + clock.as<str>)
 
   song_global:
     seq:
