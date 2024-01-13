@@ -6,6 +6,140 @@ meta:
   bit-endian: le
 
 enums:
+  controller:
+    0: bank_sel_msb
+    1: mod_wheel
+    2: breath_cont
+    3: cc3
+    4: foot_control
+    5: porta_time
+    6: data_entry
+    7: main_volume
+    8: balance
+    9: cc9
+    10: pan
+    11: expression
+    12: effect_1
+    13: effect_2
+    14: cc14
+    15: cc15
+    16: gen_pur_1
+    17: gen_pur_2
+    18: gen_pur_3
+    19: gen_pur_4
+    20: cc20
+    21: cc21
+    22: cc22
+    23: cc23
+    24: cc24
+    25: cc25
+    26: cc26
+    27: cc27
+    28: cc28
+    29: cc29
+    30: cc30
+    31: cc31
+    32: bank_sel_lsb
+    33: mod_whel_lsb
+    34: breath_lsb
+    35: cc35
+    36: foot_cnt_lsb
+    37: port_time_ls
+    38: data_ent_lsb
+    39: main_vol_lsb
+    40: balance_lsb
+    41: cc41
+    42: pan_lsb
+    43: express_lsb
+    44: effect_1_lsb
+    45: effect_2_msb
+    46: cc46
+    47: cc47
+    48: gen_pur_1_ls
+    49: gen_pur_2_ls
+    50: gen_pur_3_ls
+    51: gen_pur_4_ls
+    52: cc52
+    53: cc53
+    54: cc54
+    55: cc55
+    56: cc56
+    57: cc57
+    58: cc58
+    59: cc59
+    60: cc60
+    61: cc61
+    62: cc62
+    63: cc63
+    64: sustain_pdl
+    65: porta_pedal
+    66: sostenuto
+    67: soft_pedal
+    68: legato_ft_sw
+    69: hold_2
+    70: sound_vari
+    71: timber_harmo
+    72: release_time
+    73: attack_time
+    74: brightness
+    75: sound_cont_6
+    76: sound_cont_7
+    77: sound_cont_8
+    78: sound_cont_9
+    79: sound_cont10
+    80: gen_pur_5
+    81: gen_pur_6
+    82: gen_pur_7
+    83: gen_pur_8
+    84: porta_cntrl
+    85: cc85
+    86: cc86
+    87: cc87
+    88: cc88
+    89: cc89
+    90: cc90
+    91: ext_eff_dpth
+    92: tremolo_dpth
+    93: chorus_depth
+    94: detune_depth
+    95: phaser_depth
+    96: data_incre
+    97: data_decre
+    98: nrpn_lsb
+    99: nrpn_msb
+    100: rpn_lsb
+    101: rpn_msb
+    102: cc102
+    103: cc103
+    104: cc104
+    105: cc105
+    106: cc106
+    107: cc107
+    108: cc108
+    109: cc109
+    110: cc110
+    111: cc111
+    112: cc112
+    113: cc113
+    114: cc114
+    115: cc115
+    116: cc116
+    117: cc117
+    118: cc118
+    119: cc119
+    120: all_snd_off
+    121: reset_contrl
+    122: local_on_off
+    123: all_note_off
+    124: omni_off
+    125: omni_on
+    126: mono_mode_on
+    127: poly_mode_on
+  mixer_event_param:
+    1: stereo_level
+    2: stereo_pan
+    3: fxsend_level
+    5: indiv_level
   off_on:
     0: off
     1: on
@@ -212,6 +346,195 @@ types:
     instances:
       factor_percentage:
         value: '((factor1 / 4096.0) * 100) + (factor2 * 100)'
+  
+  bar_event:
+    seq:
+    - id: bar_number1
+      type: u1
+    - id: bar_number2
+      type: u1
+    - id: numerator
+      type: u1
+    - id: denominator
+      type: u1
+    instances:
+      # 1-based, so the first bar is bar number 1
+      bar_number:
+        value: (bar_number2 << 7) | bar_number1
+    
+  note_event:
+    seq:
+    - id: note_number
+      type: u1
+      valid:
+        min: 0
+        max: 127
+    - id: velocity
+      type: u1
+      valid:
+        min: 0
+        max: 127
+    - id: note_variation_value
+      type: u1
+    - id: duration_byte_1
+      type: u1
+    - id: duration_byte_2
+      type: u1
+    
+    enums:
+      note_variation_type:
+        0: tune
+        1: decay
+        2: attack
+        3: filter
+    
+    instances:
+      duration:
+        value: duration_byte_1 + (duration_byte_2 << 7)
+      note_variation_type:
+        value: _parent.status - 0x98
+        enum: note_variation_type 
+
+  program_change_event:
+    seq:
+    # Display value is 1 more than the parsed value.
+    - id: program
+      type: u1
+      valid:
+        min: 0
+        max: 127
+
+  pitch_bend_event:
+    seq:
+    # Display value is 1 more than the parsed value.
+    - id: pitch_bend_amount_bits_1
+      type: b8
+    - id: pitch_bend_amount_bits_2
+      type: b8
+    instances:
+      corrected_pitch_bend_amount:
+        value: (pitch_bend_amount_bits_1 + (pitch_bend_amount_bits_2 << 7)) - 8192
+
+  ch_pressure_event:
+    seq:
+      - id: pressure
+        type: u1
+        valid:
+          min: 0
+          max: 127
+
+  poly_pressure_event:
+    seq:
+      - id: note
+        type: u1
+        valid:
+          min: 0
+          max: 127
+      - id: pressure
+        type: u1
+        valid:
+          min: 0
+          max: 127
+
+  mixer_event:
+    seq:
+      - size: 2
+      - id: param
+        type: u1
+        enum: mixer_event_param
+      - id: pad_index
+        type: u1
+      - id: value
+        type: u1
+        valid:
+          min: 0
+          max: 100
+
+  exclusive_event:
+    seq:
+      - id: bytes
+        size: 2
+      - id: mixer
+        type: mixer_event
+        if: bytes == [ 0x47, 0x00 ]
+      - size: 2
+        if: bytes != [ 0x47, 0x00 ]
+
+  control_change_event:
+    seq:
+      - id: controller
+        type: u1
+        enum: controller
+      - id: value
+        type: u1
+        valid:
+          min: 0
+          max: 127
+
+  event:
+    seq:
+    - id: status
+      type: u1
+    
+    - id: track_number
+      type: u1
+      if: status != 0xA8 and status != 0x88 and status != 0xFF
+    
+    - id: bar_event
+      type: bar_event
+      if: status == 0xA8
+      
+    - id: note_event
+      type: note_event
+      if: status >= 0x90 and status <= 0x9F
+
+    - id: pitch_bend
+      if: status == 0xE0
+      type: pitch_bend_event
+      
+    - id: tune_request
+      if: status == 0xE8
+      size: 0
+     
+    - id: control_change
+      if: status >= 0xB0 and status <= 0xBF
+      type: control_change_event
+    
+    - id: program_change
+      if: status >= 0xC0 and status <= 0xCF
+      type: program_change_event
+
+    - id: ch_pressure
+      if: status >= 0xD0 and status <= 0xDF
+      type: ch_pressure_event
+    
+    - id: poly_pressure
+      if: status == 0xA0
+      type: poly_pressure_event
+       
+    - id: exclusive
+      if: status == 0xF0
+      type: exclusive_event
+
+    - id: delta_time_event
+      if: status == 0x88
+      type: u2le
+
+  last_bar_in_seq_file:
+    seq:
+    - size: 1
+    - id: bar_number1
+      type: u1
+    - id: bar_number2
+      type: u1
+    - id: numerator
+      type: u1
+    - id: denominator
+      type: u1
+    instances:
+      # 1-based, so the first bar is bar number 1
+      bar_number:
+        value: (bar_number2 << 7) | bar_number1
 
 seq:
   - id: file_id
@@ -280,3 +603,7 @@ seq:
     type: tempo_change
     repeat: expr
     repeat-expr: number_of_tempo_changes
+    
+  - id: events
+    type: event
+    repeat: eos
