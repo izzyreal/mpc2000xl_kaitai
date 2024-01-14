@@ -520,22 +520,6 @@ types:
       if: status == 0x88
       type: u2le
 
-  last_bar_in_seq_file:
-    seq:
-    - size: 1
-    - id: bar_number1
-      type: u1
-    - id: bar_number2
-      type: u1
-    - id: numerator
-      type: u1
-    - id: denominator
-      type: u1
-    instances:
-      # 1-based, so the first bar is bar number 1
-      bar_number:
-        value: (bar_number2 << 7) | bar_number1
-
 seq:
   - id: file_id
     contents: [0x03]
