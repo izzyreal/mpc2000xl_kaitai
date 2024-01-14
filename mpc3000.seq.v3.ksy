@@ -361,7 +361,7 @@ types:
       # 1-based, so the first bar is bar number 1
       bar_number:
         value: (bar_number2 << 7) | bar_number1
-    
+
   note_event:
     seq:
     - id: note_number
@@ -436,30 +436,6 @@ types:
           min: 0
           max: 127
 
-  mixer_event:
-    seq:
-      - size: 2
-      - id: param
-        type: u1
-        enum: mixer_event_param
-      - id: pad_index
-        type: u1
-      - id: value
-        type: u1
-        valid:
-          min: 0
-          max: 100
-
-  exclusive_event:
-    seq:
-      - id: bytes
-        size: 2
-      - id: mixer
-        type: mixer_event
-        if: bytes == [ 0x47, 0x00 ]
-      - size: 2
-        if: bytes != [ 0x47, 0x00 ]
-
   control_change_event:
     seq:
       - id: controller
@@ -470,55 +446,92 @@ types:
         valid:
           min: 0
           max: 127
+  
+  delta_time_event:
+    seq:
+      - id: delta_time
+        type: u2le
 
+  tune_request_event:
+    seq:
+      - id: tune_request_event
+        size: 0
+
+  mixer_event:
+    params:
+      - id: data
+        type: u1[]
+    instances:
+      param:
+        value: data[4]
+        enum: mixer_event_param
+      pad_index:
+        value: data[5]
+      value:
+        value: data[6]
+          
   event:
     seq:
-    - id: status
+    - id: parsed_status
       type: u1
-    
+      if: is_first_event
+
     - id: track_number
       type: u1
       if: status != 0xA8 and status != 0x88 and status != 0xFF
     
-    - id: bar_event
-      type: bar_event
-      if: status == 0xA8
-      
-    - id: note_event
-      type: note_event
-      if: status >= 0x90 and status <= 0x9F
+    - id: event_body
+      type:
+        switch-on: status
+        cases:
+          0x88: delta_time_event
+          0x90: note_event
+          0xA0: poly_pressure_event
+          0xA8: bar_event
+          0xB0: control_change_event
+          0xC0: program_change_event
+          0xD0: ch_pressure_event
+          0xE0: pitch_bend_event
+          0xE8: tune_request_event
 
-    - id: pitch_bend
-      if: status == 0xE0
-      type: pitch_bend_event
-      
-    - id: tune_request
-      if: status == 0xE8
-      size: 0
-     
-    - id: control_change
-      if: status >= 0xB0 and status <= 0xBF
-      type: control_change_event
-    
-    - id: program_change
-      if: status >= 0xC0 and status <= 0xCF
-      type: program_change_event
-
-    - id: ch_pressure
-      if: status >= 0xD0 and status <= 0xDF
-      type: ch_pressure_event
-    
-    - id: poly_pressure
-      if: status == 0xA0
-      type: poly_pressure_event
-       
-    - id: exclusive
+    # Typically this body contains one additional byte that does
+    # not belong to the sysex data of this event. It contains the
+    # status for the next event. The reason this parser is
+    # implemented this way, is because the SEQ file specification
+    # does not include a dedicated terminator byte for sysex events.
+    # Instead, we must keep parsing until we hit the next status
+    # byte, i.e. the first byte that is > 0x7F.
+    # The only case that this body does not contain one additional
+    # byte is when the sysex event is the last event in the SEQ
+    # file.
+    - id: system_exclusive_body
+      type: u1
+      repeat: until
+      repeat-until: '_parent._io.eof or _ > 0x7F'
       if: status == 0xF0
-      type: exclusive_event
+    
+    - id: parsed_next_status
+      type: u1
+      if: not _parent._io.eof and not status == 0xF0
 
-    - id: delta_time_event
-      if: status == 0x88
-      type: u2le
+    params:
+      - id: is_first_event
+        type: b1
+      - id: preparsed_status
+        type: u1
+
+    instances:
+      status:
+        value: 'preparsed_status == 0xFF ? parsed_status : preparsed_status'
+      next_status:
+        value: 'status == 0xF0 ? system_exclusive_body.last : parsed_next_status'
+      mixer_event:
+        type: 'mixer_event(system_exclusive_body)'
+        if: status == 0xF0 and system_exclusive_body.size >= 7 and
+            system_exclusive_body[0] == 0x47 and
+            system_exclusive_body[1] == 0x00 and
+            system_exclusive_body[2] == 0x44 and
+            system_exclusive_body[3] == 0x45
 
 seq:
   - id: file_id
@@ -589,5 +602,5 @@ seq:
     repeat-expr: number_of_tempo_changes
     
   - id: events
-    type: event
+    type: 'event(_index == 0, _index > 0 ? events[_index - 1].next_status : 0xFF)'
     repeat: eos
