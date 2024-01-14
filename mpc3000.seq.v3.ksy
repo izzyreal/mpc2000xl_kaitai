@@ -2,7 +2,7 @@
 
 meta:
   id: mpc3000_seq_v3
-  file-extension: mpc3000.seq.v3
+  file-extension: seq
   bit-endian: le
 
 enums:
