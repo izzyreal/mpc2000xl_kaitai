@@ -1,5 +1,3 @@
-### WIP ###
-
 meta:
   id: mpc3000_seq_v3
   file-extension: seq
@@ -486,6 +484,7 @@ types:
         cases:
           0x88: delta_time_event
           0x90: note_event
+          0x98: note_event
           0xA0: poly_pressure_event
           0xA8: bar_event
           0xB0: control_change_event
@@ -507,18 +506,20 @@ types:
     - id: system_exclusive_body
       type: u1
       repeat: until
-      repeat-until: '_parent._io.eof or _ > 0x7F'
+      repeat-until: '_index >= remaining_byte_count or _ > 0x7F'
       if: status == 0xF0
     
     - id: parsed_next_status
       type: u1
-      if: not _parent._io.eof and not status == 0xF0
+      if: not status == 0xF0 and remaining_byte_count > 2
 
     params:
       - id: is_first_event
         type: b1
       - id: preparsed_status
         type: u1
+      - id: remaining_byte_count
+        type: s4
 
     instances:
       status:
@@ -602,5 +603,5 @@ seq:
     repeat-expr: number_of_tempo_changes
     
   - id: events
-    type: 'event(_index == 0, _index > 0 ? events[_index - 1].next_status : 0xFF)'
+    type: 'event(_index == 0, _index > 0 ? events[_index - 1].next_status : 0xFF, _root._io.size - _root._io.pos)'
     repeat: eos
