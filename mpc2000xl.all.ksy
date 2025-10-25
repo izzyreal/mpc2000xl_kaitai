@@ -14,7 +14,16 @@ types:
         type: u1
     instances:
       display_value:
-        value: (bar > 98 ? (bar+1).as<str> : bar > 8 ? "0" + (bar+1).as<str> : "00" + (bar+1).as<str>) + "." + (beat > 8 ? (beat+1).as<str> : "0" + (beat+1).as<str>) + "." + (clock > 9 ? clock.as<str> : "0" + clock.as<str>)
+        value: >
+          (bar > 98 ? (bar+1).as<str> :
+           bar > 8 ? "0" + (bar+1).as<str> :
+           "00" + (bar+1).as<str>) +
+          "." +
+          (beat > 8 ? (beat+1).as<str> :
+           "0" + (beat+1).as<str>) +
+          "." +
+          (clock > 9 ? clock.as<str> :
+           "0" + clock.as<str>)
 
   song_global:
     seq:
@@ -380,7 +389,8 @@ types:
         type: s4
     instances:
       first_tick:
-        value: idx == 0 ? 0 : _parent.bars[idx - 1].last_tick
+        value: >
+          idx == 0 ? 0 : _parent.bars[idx - 1].last_tick
       numerator:
         value: (last_tick - first_tick) / ticks_per_beat
       denominator:
