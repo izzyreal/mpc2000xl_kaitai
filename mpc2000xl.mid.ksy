@@ -5,10 +5,6 @@ meta:
   imports:
     - standard_midi_file_with_running_status
     
-enums:
-  foo:
-    0: bar
-
 types:
   sequencer:
     seq:
