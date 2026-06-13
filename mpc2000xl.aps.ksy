@@ -191,14 +191,12 @@ seq:
     repeat-expr: sound_count
     size: 17
     
-  - size: 1
+  - size: 2
     
   - id: name
     type: str
     encoding: ASCII
     size: 17
-
-  - size: 1
 
   - id: global_parameters
     type: global_parameters
