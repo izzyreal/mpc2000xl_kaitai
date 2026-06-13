@@ -23,8 +23,8 @@ enums:
     0: none # renders on MPC2000XL as '--'
     1: m1
     2: m2
-    1: r1
-    2: r2
+    3: r1
+    4: r2
 
 types:
   slider:
