@@ -559,6 +559,10 @@ types:
         type: u1
         if: tick < 0xFFFFF
 
+      - id: terminator_pad
+        type: b4
+        if: tick >= 0xFFFFF
+
       - id: note_event
         type: note_event
         if: tick < 0xFFFFF and id <= 0x7F
@@ -596,12 +600,14 @@ types:
       - id: name_part_1
         type: str
         terminator: 0xFF
+        pad-right: 0xFF
         encoding: ASCII
         size: 8
         
       - id: name_part_2
         type: str
         terminator: 0xFF
+        pad-right: 0xFF
         encoding: ASCII
         size: 8
         if: name_part_1 != ""
@@ -674,9 +680,7 @@ types:
         repeat: expr
         repeat-expr: bar_count
       
-      - type: bar(_index)
-        repeat: expr
-        repeat-expr: 999 - bar_count
+      - size: 4 * (999 - bar_count)
         
       - size: 865
       

@@ -100,7 +100,8 @@ types:
         pos: _io.pos
         type: u1
       event_type:
-        value: using_running_status ? previous_event_type : event_header & 0xf0
+        value: >
+          using_running_status ? previous_event_type : event_header & 0xf0
       channel:
         value: event_header & 0xf
         if: event_type != 0xf0
