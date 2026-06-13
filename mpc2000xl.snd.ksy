@@ -1,6 +1,7 @@
 meta:
   id: mpc2000snd
   file-extension: SND
+  bit-endian: le
 seq:
   - id: magic
     contents: [0x01, 0x04]
