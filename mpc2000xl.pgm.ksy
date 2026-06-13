@@ -133,14 +133,12 @@ seq:
     repeat-expr: sound_count
     size: 17
     
-  - size: 1
+  - size: 2
   
   - id: name
     type: str
-    size: 16
+    size: 17
     encoding: ASCII
-    
-  - size: 2
     
   - id: slider
     type: slider
