@@ -29,7 +29,7 @@ seq:
     type: u1
   - id: sample_rate
     type: u2le
-  - id: frames
+  - id: sample_data
     type: s2le
     repeat: expr
-    repeat-expr: frame_count
+    repeat-expr: "stereo ? frame_count * 2 : frame_count"
