@@ -1,5 +1,6 @@
 meta:
   id: mpc2000xl_aps
+  bit-endian: le
   file-extension: aps
   imports: mpc2000xl.pgm
 
