@@ -101,7 +101,6 @@ types:
         
   global_parameters:
     seq:
-      - type: b7
       - id: pad_to_internal_sound
         type: b1
         enum: no_yes
@@ -109,18 +108,19 @@ types:
       - id: pad_assign
         type: b1
         enum: pad_assign
-      - type: b6
-      - id: indiv_fx_source
-        type: b1
-        enum: mix_source
+      - type: b7
       - id: stereo_mix_source
         type: b1
         enum: mix_source
-      - type: b3
-      - id: record_mix_changes
+      - id: indiv_fx_source
+        type: b1
+        enum: mix_source
+      - type: b6
+      - id: copy_pgm_mix_to_drum
         type: b1
         enum: no_yes
-      - id: copy_pgm_mix_to_drum
+      - type: b3
+      - id: record_mix_changes
         type: b1
         enum: no_yes
       - type: b3
