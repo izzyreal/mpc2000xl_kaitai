@@ -690,9 +690,6 @@ void mpc2000xl_all_t::midi_switch_t::_read() {
     if (!(controller() >= 0)) {
         throw kaitai::validation_less_than_error<uint8_t>(0, controller(), _io(), std::string("/types/midi_switch/seq/0"));
     }
-    if (!(controller() <= 127)) {
-        throw kaitai::validation_greater_than_error<uint8_t>(127, controller(), _io(), std::string("/types/midi_switch/seq/0"));
-    }
     m_function = static_cast<mpc2000xl_all_t::midi_switch_function_t>(m__io->read_u1());
 }
 

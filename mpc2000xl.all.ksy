@@ -309,9 +309,7 @@ types:
     seq:
       - id: controller
         type: u1
-        valid:
-          min: 0
-          max: 127
+        doc: 0xFF is used for an unassigned footswitch controller.
       - id: function
         type: u1
         enum: midi_switch_function
