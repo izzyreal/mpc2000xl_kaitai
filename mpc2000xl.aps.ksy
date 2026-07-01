@@ -18,9 +18,10 @@ enums:
 types:
   note:
     seq:
-      - id: sound_index # 255 means OFF
-        type: u1
-      - size: 1
+      # Global APS sound references are 16-bit little-endian.
+      # 0xffff means OFF, otherwise 0-255 are valid sound indices.
+      - id: sound_index
+        type: u2le
       - id: sound_generation_mode
         type: u1
         enum: mpc2000xl_pgm::sound_generation_mode
@@ -181,9 +182,7 @@ seq:
     contents: [0x0a, 0x05]
   
   - id: sound_count
-    type: u1
-  
-  - size: 1
+    type: u2le
   
   - id: sound_names
     type: str
