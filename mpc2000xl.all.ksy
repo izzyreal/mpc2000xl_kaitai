@@ -345,9 +345,11 @@ types:
         type: str
         encoding: ASCII
         size: 16
-      - id: is_used
+      - id: last_event_index
         type: u2le
-        enum: sequence_is_used
+    instances:
+      is_used:
+        value: last_event_index != 0
   
   song_step:
     seq:
