@@ -1,5 +1,3 @@
-### WIP ###
-
 meta:
   id: mpc60_set_v1
   file-extension: SET
@@ -21,10 +19,11 @@ seq:
   repeat-expr: 34
 
 - id: sound_map
+  # Position in this table identifies the MPC60 pad; each byte is
+  # the referenced sound_directory_entry index for that pad.
   repeat: expr
   repeat-expr: 34
   type: u1
-  enum: physical_drum
 
 - id: use_master_mix_data
   type: u1
@@ -180,16 +179,7 @@ enums:
     0: less_than_or_equals_47_khz
     1: greater_than_47_khz
 
-  # Something is not lining up well yet. With the factory STUDIO and
-  # ROCK SET files, element with 0-based index 10 in the sound_map is
-  # PRC3, even though it would make more sense for it to be a DRnn.
-  # Likewise, the 3 hihat entries in the sound_map are in indices
-  # 18, 19 and 20, whereas the directory entries with those indices are
-  # COWBEL, HAT2CLSD and HAT2MED. So there is some off-by-one error, or
-  # this list of enum cases is incorrect, or I don't know how to map
-  # directory entries to the sound map.
-  # More investigation needed.
-  physical_drum:
+  mpc60_pad:
     0: hiht_clsd
     1: hiht_medm
     2: hiht_open
