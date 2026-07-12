@@ -32,6 +32,13 @@ Fresh July 2026 body-level validation:
 - real `mpc60 2.12` raw-image extracts, sliced to their actual FAT file sizes,
   parse cleanly with the existing `mpc3000.seq.v3` and `mpc3000.all.v3`
   layouts
+- real `mpc60scsi 2.14` files confirm that:
+  - `03 02` `SEQ` uses a smaller body that still reuses key MPC3000-style
+    primitives such as full 24-byte track headers and explicit tempo-change
+    records
+  - `04 02` `ALL` embeds those `SEQ` bodies directly
+  - in `04 02`, `total_number_of_bytes_in_all_sequences` includes the embedded
+    sequence terminator byte (`0xFF`)
 - practical interpretation: the `0x03` wrapper family is currently best
   understood as a shared MPC3000/MPC60-family body/layout, with model names in
   filenames serving provenance rather than exclusivity

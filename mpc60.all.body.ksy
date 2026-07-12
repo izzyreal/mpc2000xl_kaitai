@@ -11,6 +11,11 @@ meta:
 # Fresh July 2026 validation against real `MPC60_v214_ALL_SEQS.ALL` indicates
 # that the embedded sequence body here shares the same reduced-MPC3000-style
 # primitives as `mpc60_seq_body`.
+#
+# Important container rule confirmed against both sentinel-only and song-bearing
+# real files:
+# `total_number_of_bytes_in_all_sequences` includes the embedded sequence
+# terminator byte (`0xFF`). The wrapper then continues with song records.
 
 types:
   all_file_body:
@@ -20,6 +25,8 @@ types:
     - id: sequences
       type: mpc60_seq_body::sequence
       repeat: until
+      # The stored byte count includes the final embedded `0xFF` sequence
+      # terminator, so the sequence list stops one byte before that terminator.
       repeat-until: _io.pos - 6 >= total_number_of_bytes_in_all_sequences - 1
     - id: sequences_terminator
       contents: [0xFF]
