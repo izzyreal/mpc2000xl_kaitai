@@ -32,6 +32,10 @@ Fresh July 2026 body-level validation:
 - real `mpc60 2.12` raw-image extracts, sliced to their actual FAT file sizes,
   parse cleanly with the existing `mpc3000.seq.v3` and `mpc3000.all.v3`
   layouts
+- real `mpc60 2.12` `04 03` ALL files also confirm that
+  `total_number_of_bytes_in_all_sequences` includes the embedded sequence
+  terminator byte (`0xFF`), followed directly by song records or the lone
+  `0x00` end sentinel
 - real `mpc60scsi 2.14` files confirm that:
   - `03 02` `SEQ` uses a smaller body that still reuses key MPC3000-style
     primitives such as full 24-byte track headers and explicit tempo-change

@@ -17,15 +17,20 @@ seq:
   - id: sequences
     type: sequence
     repeat: until
-    # We check against -1 because event parsing is based on always parsing the
-    # status byte for the next event.
-    repeat-until: (_io.pos - 6) -
-                  all_file_header.total_number_of_bytes_in_all_sequences == -1
+    # Fresh July 2026 validation against real MPC60 2.12 `04 03` files confirms
+    # that `total_number_of_bytes_in_all_sequences` includes the embedded
+    # sequence terminator byte (`0xFF`). The sequence list therefore stops one
+    # byte before that terminator.
+    repeat-until: _io.pos - 6 >=
+                  all_file_header.total_number_of_bytes_in_all_sequences - 1
+
+  - id: sequences_terminator
+    contents: [0xFF]
 
   - id: songs
     type: song
     repeat: until
-    repeat-until: songs[_index - 1].number_of_steps == 0x00
+    repeat-until: _.number_of_steps == 0x00
 
 types:
   all_file_header:
@@ -103,16 +108,13 @@ types:
         
   song:
     seq:
-    # This may be 0xFF if there's still a terminator byte to be
-    # parsed from the last sequence, in which case we must still
-    # parse songs.
-    # It may also be 0x00, indicating the end of the ALL file.
+    # 0x00 indicates the end of the ALL file.
     - id: number_of_steps
       type: u1
     
     - id: song_body
       type: song_body
-      if: number_of_steps != 0x00 and number_of_steps != 0xFF
+      if: number_of_steps != 0x00
     
     types:
       song_body:
