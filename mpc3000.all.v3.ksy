@@ -17,7 +17,7 @@ seq:
   - id: sequences
     type: sequence
     repeat: until
-    # Fresh July 2026 validation against real MPC60 2.12 `04 03` files confirms
+    # Fresh July 2026 validation against real MPC60 2.12 and MPC3000 `04 03` files confirms
     # that `total_number_of_bytes_in_all_sequences` includes the embedded
     # sequence terminator byte (`0xFF`). The sequence list therefore stops one
     # byte before that terminator.
