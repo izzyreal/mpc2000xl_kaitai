@@ -3,6 +3,11 @@ meta:
   file-extension: seq
   bit-endian: le
 
+# Naming note:
+# `mpc3000` in this filename is provenance-oriented. The `0x03` wrapper family
+# appears to be firmware-specific rather than strictly model-exclusive; earlier
+# MPC60 2.12 evidence points at the same `03 03` SEQ wrapper.
+
 enums:
   controller:
     0: bank_sel_msb

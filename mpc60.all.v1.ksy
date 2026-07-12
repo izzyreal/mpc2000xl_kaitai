@@ -1,5 +1,18 @@
 ### WIP ###
 
+# Historical note:
+# this schema name is provisional and predates later wrapper-version evidence.
+# Newer probes suggest MPC60-family ALL/SEQ wrapper bytes vary with firmware
+# rather than mapping cleanly to a single model-level format:
+#   - mpc60scsi 2.14: ALL `04 02`, SEQ `03 02`
+#   - earlier plain mpc60 2.12 evidence: ALL `04 03`, SEQ `03 03`
+# So this file should be read as an early WIP mapping, not as the settled final
+# statement on "the MPC60 ALL format".
+#
+# Another important clarification: the body below is effectively a sequence-body
+# prototype. Standalone SEQ wrappers now live in `mpc60.seq.v2.ksy` and
+# `mpc60.seq.v3.ksy`, both importing `mpc60.seq.body.ksy`.
+
 meta:
   id: mpc60_all_v1
   file-extension: all

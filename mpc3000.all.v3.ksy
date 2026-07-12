@@ -4,6 +4,11 @@ meta:
   bit-endian: le
   imports:
     - mpc3000.seq.v3
+
+# Naming note:
+# `mpc3000` in this filename is provenance-oriented. The `0x03` ALL wrapper
+# family appears to be firmware-specific rather than strictly model-exclusive;
+# earlier MPC60 2.12 evidence points at `04 03` as well.
     
 seq:
   - id: all_file_header
@@ -29,6 +34,7 @@ types:
       contents: [0x04]
     
     - id: file_version
+      # Wrapper/version byte `0x03` is not assumed to be MPC3000-exclusive.
       contents: [0x03]
       
     - id: total_number_of_bytes_in_all_sequences

@@ -1,0 +1,52 @@
+# Format Version Notes
+
+For MPC sequence/song container formats, the product name in a `.ksy` filename
+should be read primarily as provenance, not as a claim that the wrapper/version
+bytes are exclusive to that product line.
+
+## Practical Rule
+
+There is not necessarily such a thing as a universally distinct "MPC60 ALL
+format" vs "MPC3000 ALL format" vs "MPC2000XL ALL format" at the wrapper-byte
+level.
+
+What matters first is:
+
+- file kind byte, for example `0x03` for `SEQ` and `0x04` for `ALL`
+- wrapper/version byte that follows it
+- which firmware versions are known to read or write that combination
+
+## Current Evidence
+
+- `mpc60scsi` firmware `2.14`
+  - `SEQ` starts with `03 02`
+  - `ALL` starts with `04 02`
+- earlier plain `mpc60` `2.12` probe artifacts point to
+  - `SEQ` starting with `03 03`
+  - `ALL` starting with `04 03`
+- the current `mpc3000.seq.v3.ksy` / `mpc3000.all.v3.ksy` model the `0x03`
+  wrapper family
+
+Fresh July 2026 body-level validation:
+
+- real `mpc60 2.12` raw-image extracts, sliced to their actual FAT file sizes,
+  parse cleanly with the existing `mpc3000.seq.v3` and `mpc3000.all.v3`
+  layouts
+- practical interpretation: the `0x03` wrapper family is currently best
+  understood as a shared MPC3000/MPC60-family body/layout, with model names in
+  filenames serving provenance rather than exclusivity
+
+So the working assumption is:
+
+- wrapper version is firmware-specific
+- model names in the schema filenames are still useful, but mainly as "where
+  this mapping was first established / most strongly associated"
+
+## Consumer Guidance
+
+If you are writing a loader:
+
+1. dispatch on file kind and wrapper/version bytes first
+2. treat model/firmware support as a compatibility question on top of that
+3. do not assume a schema filename with a model name implies protocol
+   exclusivity
