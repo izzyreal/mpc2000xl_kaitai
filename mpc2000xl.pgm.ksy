@@ -7,6 +7,7 @@ enums:
     0: normal
     1: simult
     2: vel_sw
+    3: dcy_sw
   voice_overlap_mode:
     0: poly
     1: mono

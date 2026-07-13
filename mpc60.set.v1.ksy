@@ -20,7 +20,8 @@ seq:
 
 - id: sound_map
   # Position in this table identifies the MPC60 pad; each byte is
-  # the referenced sound_directory_entry index for that pad.
+  # the referenced sound_directory_entry index for that pad. 255 means
+  # that the MPC60 pad has no sound assigned.
   repeat: expr
   repeat-expr: 34
   type: u1

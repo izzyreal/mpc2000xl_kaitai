@@ -6,17 +6,21 @@ meta:
   bit-endian: le
 
 doc: |
-  Provisional parser for MPC60 SND files whose first two bytes are 0x01 0x01.
+  Parser for MPC60 SND files whose first two bytes are 0x01 0x01.
 
-  This definition is based on two hardware MPC60 SND files:
-  SOUND002.SND and SOUND003.SND. The header layout and packed sample byte count
-  are supported by both files, but the sample-value decoding algorithm is still
-  unresolved. For that reason, sample data is exposed as raw packed bytes.
+  This definition is based on hardware MPC60 SND files plus a native MAME MPC60
+  2.14 ROCK.SET export corpus. The header layout and packed sample byte count
+  are supported by all currently preserved native MPC60 SND files. The packed
+  12-bit sample-code layout matches the MPC60 SET sample storage layout; the
+  stateful conversion from those codes to imported 16-bit PCM is documented
+  separately in MPC60_12BIT_SAMPLE_DECODER.md rather than expressed directly in
+  this schema.
 
   Known evidence:
   - SOUND002.SND: 6039 bytes total, 4000 samples, 6000 sample bytes
   - SOUND003.SND: 120039 bytes total, 80000 samples, 120000 sample bytes
-  - both imply a 39-byte header and 12-bit packed sample storage
+  - 17 native MAME MPC60 2.14 ROCK.SET exports preserved in codex-mame
+  - all imply a 39-byte header and 12-bit packed sample storage
 
 seq:
   - id: file_id
@@ -79,12 +83,13 @@ seq:
     repeat: expr
     repeat-expr: packed_sample_pair_count
     doc: |
-      Packed 12-bit sample code pairs. The packing is supported by STIM002 /
-      MAIM002: all 4096 plateau interiors are stable with this unpacking.
+      Packed 12-bit sample code pairs. This is the same little-bit-endian
+      two-words-in-three-bytes layout used by MPC60 SET sample data and
+      documented in MPC60_12BIT_SAMPLE_DECODER.md.
 
-      These are sample codes, not final decoded audio amplitudes. The MPC60
-      load path may normalize, and the value conversion/nonlinear representation
-      is not fully resolved yet.
+      These are sample codes, not final decoded audio amplitudes. The exact
+      MPC2000XL import conversion is stateful consumer logic and is intentionally
+      outside this structural schema.
 
 types:
   sample_pair:
@@ -97,9 +102,9 @@ types:
         type: u1
     instances:
       sample0_code:
-        value: byte0 | ((byte1 & 0xf0) << 4)
+        value: byte0 | ((byte1 & 0x0f) << 8)
       sample1_code:
-        value: byte2 | ((byte1 & 0x0f) << 8)
+        value: byte2 | ((byte1 & 0xf0) << 4)
 
 instances:
   header_size:
@@ -115,5 +120,6 @@ instances:
   sample_rate:
     value: 40000
     doc: |
-      Exposed as a provisional constant for the two current hardware probes.
-      MPC60 sampling-rate behavior still needs further verification.
+      Current hardware/file evidence points to 40 kHz for this version-family.
+      If later MPC60 SND evidence shows multiple rates, promote this into a real
+      parsed field or a version split.
