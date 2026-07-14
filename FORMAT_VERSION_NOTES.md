@@ -26,6 +26,10 @@ What matters first is:
   - `ALL` starting with `04 03`
 - the current `mpc3000.seq.v3.ksy` / `mpc3000.all.v3.ksy` model the `0x03`
   wrapper family
+- the current `mpc3000.snd.v2.ksy` models the `0x01 0x02` SND wrapper family
+  and is confirmed on:
+  - local hardware MPC3000 OS `3.11`
+  - MAME MPC3000 firmware `3.10`
 
 Fresh July 2026 body-level validation:
 
@@ -46,6 +50,12 @@ Fresh July 2026 body-level validation:
 - practical interpretation: the `0x03` wrapper family is currently best
   understood as a shared MPC3000/MPC60-family body/layout, with model names in
   filenames serving provenance rather than exclusivity
+- practical interpretation for MPC3000 SND so far:
+  - `0x01 0x02` is confirmed on hardware MPC3000 OS `3.11`
+  - `0x01 0x02` is confirmed on MAME MPC3000 firmware `3.10`
+  - at least one header field inside that family (`unknown_2` in the current
+    provisional schema) varies between the hardware OS `3.11` probe and the
+    MAME `3.10` rewrite of the same sample content
 
 So the working assumption is:
 
@@ -61,3 +71,17 @@ If you are writing a loader:
 2. treat model/firmware support as a compatibility question on top of that
 3. do not assume a schema filename with a model name implies protocol
    exclusivity
+
+## MPC3000 SND 0x01 0x02
+
+Known producers:
+
+- hardware MPC3000 OS 3.11
+- MAME MPC3000 firmware 3.10
+
+Focused MAME 3.10 save-session findings:
+
+- header byte 19 is saved `Vol%` / level (`0x32`, `0x64`, `0xc8` for 50, 100, 200)
+- `unknown_2` increases by exactly `frame_count` on each save of the same sample
+- `Soft st` / `Soft end` edits did not change the persisted payload in that save path
+
