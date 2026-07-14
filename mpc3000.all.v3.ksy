@@ -54,11 +54,11 @@ types:
       type: 'mpc3000_seq_v3::event(
         _index == 0,
         _index > 0 ? events[_index - 1].next_status : 0xFF, 
-        misc_chunks.sequence_header.sequence_length_in_bytes.value -
+        misc_chunks.sequence_header.event_stream_length_in_bytes.value -
           (_io.pos - misc_chunks.position_after_tempo_changes))'
       
       repeat: until
-      repeat-until: misc_chunks.sequence_header.sequence_length_in_bytes.value -
+      repeat-until: misc_chunks.sequence_header.event_stream_length_in_bytes.value -
           (_io.pos - misc_chunks.position_after_tempo_changes) == 0
       
   misc_chunks:
@@ -74,33 +74,39 @@ types:
       repeat: expr
       repeat-expr: 64
       
-    - size: 2
+    - id: reserved_after_mixer
+      contents: [0x00, 0x00]
     
     - id: delays
       type: mpc3000_seq_v3::delays
       
-    - size: 3
+    - id: reserved_after_delays
+      contents: [0x00, 0x00, 0x00]
     
-    - size: 16
+    - id: reserved_before_track_summary
+      contents: [
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+      ]
     
     - id: last_active_track
       type: u1
       
-    - id: number_of_tempo_changes
+    - id: num_tempo_changes
       type: u1
       
-    - id: number_of_active_track_headers
+    - id: num_track_headers
       type: u1
     
     - id: track_headers
       type: mpc3000_seq_v3::track_header
       repeat: expr
-      repeat-expr: number_of_active_track_headers
+      repeat-expr: num_track_headers
     
     - id: tempo_changes
       type: mpc3000_seq_v3::tempo_change
       repeat: expr
-      repeat-expr: number_of_tempo_changes
+      repeat-expr: num_tempo_changes
     
     instances:
       position_after_tempo_changes:

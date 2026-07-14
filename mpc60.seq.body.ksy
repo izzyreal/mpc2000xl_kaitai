@@ -14,7 +14,7 @@ meta:
 # - full 24-byte track headers
 # - explicit tempo-change records
 # - an event stream whose byte length is governed directly by
-#   `sequence_length_in_bytes`
+#   `event_stream_length_in_bytes`
 
 enums:
   off_on:
@@ -64,7 +64,7 @@ types:
     seq:
     - id: sequence_number
       type: u1
-    - id: sequence_length_in_bytes
+    - id: event_stream_length_in_bytes
       type: u3le
     - id: offset_from_bottom_of_sequence_to_sequence_start
       type: u3le
@@ -104,9 +104,9 @@ types:
       repeat-expr: 32
     - id: last_active_user_track
       type: u1
-    - id: number_of_tempo_changes
+    - id: num_tempo_changes
       type: u1
-    - id: number_of_active_track_headers
+    - id: num_track_headers
       type: u1
 
   sequence:
@@ -116,19 +116,19 @@ types:
     - id: track_headers
       type: mpc3000_seq_v3::track_header
       repeat: expr
-      repeat-expr: sequence_header.number_of_active_track_headers
+      repeat-expr: sequence_header.num_track_headers
     - id: tempo_changes
       type: mpc3000_seq_v3::tempo_change
       repeat: expr
-      repeat-expr: sequence_header.number_of_tempo_changes
+      repeat-expr: sequence_header.num_tempo_changes
     - id: events
       type: 'mpc3000_seq_v3::event(
         _index == 0,
         _index > 0 ? events[_index - 1].next_status : 0xFF,
-        sequence_header.sequence_length_in_bytes.value -
+        sequence_header.event_stream_length_in_bytes.value -
         (_io.pos - events_start))'
       repeat: until
-      repeat-until: sequence_header.sequence_length_in_bytes.value -
+      repeat-until: sequence_header.event_stream_length_in_bytes.value -
                     (_io.pos - events_start) == 0
     instances:
       events_start:

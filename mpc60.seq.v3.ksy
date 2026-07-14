@@ -35,10 +35,10 @@ instances:
     value: body.delays
   last_active_track:
     value: body.last_active_track
-  number_of_tempo_changes:
-    value: body.number_of_tempo_changes
-  number_of_active_track_headers:
-    value: body.number_of_active_track_headers
+  num_tempo_changes:
+    value: body.num_tempo_changes
+  num_track_headers:
+    value: body.num_track_headers
   track_headers:
     value: body.track_headers
   tempo_changes:

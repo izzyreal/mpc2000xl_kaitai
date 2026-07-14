@@ -215,23 +215,35 @@ types:
     seq:
     - id: sequence_number
       type: u1
-    - id: sequence_length_in_bytes # excluding sequence header
+    # Byte count of the event stream at the end of the file.
+    - id: event_stream_length_in_bytes
       type: u3le
 
-    # unknown
-    - size: 5    
+    - id: reserved_before_event_stream_sentinel_flag
+      contents: [0x00]
+    # Observed as 1 in OS 3.11 files whose event stream starts with 0xff and
+    # lacks a trailing 0xff; 0 in files whose event stream ends with 0xff.
+    - id: event_stream_starts_with_ff
+      type: u1
+      enum: no_yes
+    - id: reserved_before_name
+      contents: [0x00, 0x00, 0x00]
 
     - id: sequence_name
       type: str
       encoding: ASCII
       size: 16
     
-    - size: 1 # unknown
+    - id: reserved_after_name
+      contents: [0x00]
     
     - id: loop_to_bar
       type: b1
       enum: off_on
-    - type: b7
+    - id: loop_flags_reserved
+      type: b7
+      valid:
+        eq: 4
     - id: loop_to_bar_number
       type: u2le
     - id: number_of_bars
@@ -248,14 +260,14 @@ types:
       valid:
         min: 0
         max: 100
-    - id: stereo_pan # to be verified
+    - id: stereo_pan
       type: u1
       valid:
         min: 0
         max: 100
-    - id: individual_out_mix # to be verified
+    - id: individual_out_mix
       type: u1
-    - id: individual_out # to be verified
+    - id: individual_out
       type: b7
       enum: individual_out
     - id: follow_stereo
@@ -266,28 +278,64 @@ types:
     seq:
     - id: volume1
       type: u1
+      valid:
+        min: 0
+        max: 100
     - id: volume2
       type: u1
+      valid:
+        min: 0
+        max: 100
     - id: volume3
       type: u1
+      valid:
+        min: 0
+        max: 100
     - id: pan1
       type: u1
+      valid:
+        min: 0
+        max: 100
     - id: pan2
       type: u1
+      valid:
+        min: 0
+        max: 100
     - id: pan3
       type: u1
+      valid:
+        min: 0
+        max: 100
     - id: time1
       type: u2le
+      valid:
+        min: 0
+        max: 1486
     - id: time2
       type: u2le
+      valid:
+        min: 0
+        max: 1486
     - id: time3
       type: u2le
+      valid:
+        min: 0
+        max: 1486
     - id: feedback1
       type: u1
+      valid:
+        min: 0
+        max: 100
     - id: feedback2
       type: u1
+      valid:
+        min: 0
+        max: 100
     - id: feedback3
       type: u1
+      valid:
+        min: 0
+        max: 100
 
   track_header:
     seq:
@@ -297,7 +345,12 @@ types:
     - id: absolute_recorded_track_number
       type: s1
     
-    - size: 23
+    - id: unused_track_header_padding
+      contents: [
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+      ]
       if: absolute_recorded_track_number == -1
     
     - id: user_track_number
@@ -312,7 +365,10 @@ types:
     - id: drum_track
       type: b1
       if: absolute_recorded_track_number != -1
-    - type: b5
+    - id: track_flags_reserved
+      type: b5
+      valid:
+        eq: 0
       if: absolute_recorded_track_number != -1
     - id: primary_port_channel_assignment
       type: u1
@@ -335,7 +391,8 @@ types:
       type: u1
       if: absolute_recorded_track_number != -1
       
-    - size: 1
+    - id: reserved_after_program_change
+      contents: [0x00]
       if: absolute_recorded_track_number != -1
 
   tempo_change:
@@ -571,14 +628,20 @@ seq:
     repeat: expr
     repeat-expr: 64
     
-  - size: 2
+  - id: reserved_after_mixer
+    contents: [0x00, 0x00]
   
   - id: delays
     type: delays
     
-  - size: 3
+  - id: reserved_after_delays
+    contents: [0x00, 0x00, 0x00]
   
-  - size: 16
+  - id: reserved_before_track_summary
+    contents: [
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    ]
   
   - id: last_active_track
     type: u1
@@ -586,26 +649,24 @@ seq:
   # Is 1 when there's only the initial tempo change.
   # Is 3 when there's the initial tempo change and one additional one.
   # Is 4 when there are 2 additional tempo changes.
-  - id: number_of_tempo_changes
+  - id: num_tempo_changes
     type: u1
     
-  # Is 3 with 1 active track.
-  # Is 4 with 2 active tracks.
-  # Is 5 with 3 active tracks.
-  # Is 6 with 4 active tracks, etc.
-  # So there's always 2 spare track headers.
-  - id: number_of_active_track_headers
+  # Number of serialized 24-byte track headers. This can include unused
+  # headers; current fixtures show both 2 and 3 serialized headers for
+  # one-track sequences.
+  - id: num_track_headers
     type: u1
   
   - id: track_headers
     type: track_header
     repeat: expr
-    repeat-expr: number_of_active_track_headers
+    repeat-expr: num_track_headers
   
   - id: tempo_changes
     type: tempo_change
     repeat: expr
-    repeat-expr: number_of_tempo_changes
+    repeat-expr: num_tempo_changes
     
   - id: events
     type: 'event(_index == 0, _index > 0 ? events[_index - 1].next_status : 0xFF, _root._io.size - _root._io.pos)'
