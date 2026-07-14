@@ -55,6 +55,9 @@ seq:
     type: mixer_settings
     repeat: expr
     repeat-expr: 64
+    doc: Real MPC3000 OS 3.11 empty APS evidence puts a 64-entry top-level
+         mixer table here, despite Roger Linn's note reading like a single
+         master mixer record.
 
   - id: programs
     type: program
@@ -68,6 +71,9 @@ seq:
     size: 17
     repeat: expr
     repeat-expr: 128
+    doc: Global 128-entry sound-name table. Roger Linn's APS v3 notes place
+         this earlier in the file, but real MPC3000 OS 3.11 empty APS evidence
+         currently points at a trailing table after the program blocks.
 
 enums:
   mix_source:
@@ -89,8 +95,8 @@ types:
         2: note_off
   
       decay_mode:
-        0: start
-        1: end
+        0: end
+        1: start
       note_variation_type:
         0: tune
         1: decay
@@ -114,12 +120,12 @@ types:
       - id: poly
         enum: poly_mode
         type: u1
-      - id: cutoff1
+      - id: cutoff_note_1
         type: u1
-      - id: cutoff2
+      - id: cutoff_note_2
         type: u1
       - id: tune
-        type: u2
+        type: s2
       - id: attack
         type: u1
       - id: decay
