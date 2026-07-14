@@ -125,30 +125,65 @@ types:
       - id: sound_generator_mode
         type: u1
         enum: sound_generator_mode
+        doc: Confirmed by MAME MPC3000 v3.10 contrast saves and Roger Linn's
+             MPC file-format notes. Byte value 0 is NORMAL, 1 is SIMULT, 2
+             is VEL SW, and the doc describes 3 as DCY SW.
       - id: if_over1
         type: u1
+        doc: Active on switch-based generator modes. The exact UI-to-byte
+             mapping was probed on MAME MPC3000 v3.10. In a saved VEL SW
+             contrast, changing the first visible threshold from 44 to 43
+             changed this byte from 0x2c to 0x2b.
       - id: use_also_plays1
         type: u1
+        doc: Active on switch-based generator modes. In a saved VEL SW
+             contrast, changing the first visible target from OFF to 35/C14
+             changed this byte from 0x22 to 0x23.
       - id: if_over2
         type: u1
+        doc: Active on switch-based generator modes. Confirmed by MAME
+             MPC3000 v3.10 contrast saves after correcting the note-record
+             table start to file offset 2752.
       - id: use_also_plays2
         type: u1
+        doc: Active on switch-based generator modes and simultaneous mode.
+             Confirmed by MAME MPC3000 v3.10 contrast saves after correcting
+             the note-record table start to file offset 2752.
       - id: poly
         enum: poly_mode
         type: u1
-      - id: cutoff1
+        doc: Confirmed by MAME MPC3000 v3.10 contrast saves and Roger Linn's
+             MPC file-format notes. 0 = POLY, 1 = MONO, 2 = NOTE OFF.
+      - id: cutoff_note_1
         type: u1
-      - id: cutoff2
+        doc: First cutoff-assignment note number from the Env,Veloc.. screen.
+             This is not a filter cutoff value. Roger Linn's file-format
+             notes describe it as 'Cutoff 1 (notes 35-98 or 0)' and live
+             saves matched visible values like 64/B12.
+      - id: cutoff_note_2
         type: u1
+        doc: Second cutoff-assignment note number from the Env,Veloc.. screen.
+             This is not a filter cutoff value. Roger Linn's file-format
+             notes describe it as 'Cutoff 2 (notes 35-98 or 0)' and live
+             saves matched visible values like 65/B05.
       - id: tune
-        type: u2
+        type: s2
+        doc: Signed tune value. Confirmed by a MAME MPC3000 v3.10 contrast
+             save where visible `Tune:-1` wrote `0xffff`.
       - id: attack
         type: u1
       - id: decay
         type: u1
+        doc: Real empty hardware PROGRAM.pgm carries value 6 in every record,
+             while MAME MPC3000 v3.10 Initialize Program writes 0 in every
+             record.
       - id: decay_mode
         type: u1
         enum: decay_mode
+        doc: |
+          Confirmed by a dedicated MAME MPC3000 v3.10 contrast save:
+          visible `Dcy md:START` wrote byte value 1, so the firmware's file
+          encoding is 0 = END and 1 = START.
       - id: filter_frequency
         type: u1
       - id: filter_resonance
@@ -170,6 +205,9 @@ types:
       - id: param
         type: u1
         enum: note_variation_type
+        doc: Per-note note-variation parameter selector. Roger Linn's
+             file-format notes describe 0 = TUNING, 1 = DECAY, 2 = ATTACK,
+             3 = FILTER.
       
   mixer_screen:
     seq:
@@ -226,5 +264,5 @@ enums:
     2: note_off
   
   decay_mode:
-    0: start
-    1: end
+    0: end
+    1: start
