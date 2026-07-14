@@ -22,6 +22,14 @@ seq:
     encoding: ASCII
   - id: active_program_number
     type: u1
+    doc: |
+      Roger Linn's notes describe this as the active program number at save
+      time and phrase the visible domain as `1-8` / `1-24` depending on
+      model. However, the preserved real-hardware MPC3000 OS 3.11
+      `ALL_PGMS.APS` corpus currently carries raw value `0` in this field.
+      Treat the exact on-disk base (0-based vs 1-based) as still requiring
+      dedicated contrast saves rather than assuming Roger's visible numbering
+      maps directly to the serialized byte.
     
   - id: stereo_mix_source
     type: u1
@@ -40,13 +48,24 @@ seq:
 
   - id: center_pad_16_levels_if_param_tuning
     type: u1
+    doc: |
+      Persisted center pad from the MPC3000 `Assign '16 Levels'` screen when
+      `Param = NOTE VAR (TUNING)`. Dedicated MAME MPC3000 v3.10 APS contrast
+      saves established that the raw stored byte is the visible pad number
+      itself, with observed domain `4..13`, not a normalized `0..9` index.
 
   - id: audio_trigger_assign
     type: u1
     valid:
       min: 0
       max: 98
-    doc: 35-98 or 0
+    doc: |
+      Audio Trigger screen assignment. Roger Linn's notes describe the visible
+      domain as note numbers `35..98` or `0` for off/unassigned. On the live
+      MPC3000 v3.10 `Audio Trigger (Use Sync Input)` screen, the off state is
+      rendered as `Plays note:--/OFF`, which matches the Roger note's
+      serialized `0` convention. The exact consumer mapping in VMPC-style
+      models is still unresolved.
 
   - id: effects_settings
     type: effects_settings
