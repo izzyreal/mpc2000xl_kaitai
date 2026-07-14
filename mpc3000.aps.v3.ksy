@@ -22,14 +22,17 @@ seq:
     encoding: ASCII
   - id: active_program_number
     type: u1
+    valid:
+      min: 0
+      max: 23
     doc: |
-      Roger Linn's notes describe this as the active program number at save
-      time and phrase the visible domain as `1-8` / `1-24` depending on
-      model. However, the preserved real-hardware MPC3000 OS 3.11
-      `ALL_PGMS.APS` corpus currently carries raw value `0` in this field.
-      Treat the exact on-disk base (0-based vs 1-based) as still requiring
-      dedicated contrast saves rather than assuming Roger's visible numbering
-      maps directly to the serialized byte.
+      Active program at save time. Roger Linn's notes phrase the visible
+      domain as `1-8` / `1-24` depending on model, but a dedicated live MAME
+      MPC3000 v3.10 contrast save established that the on-disk byte is
+      zero-based: a file showing `Active program: 1` carries raw value `0`,
+      and changing the visible value to `2` changes the serialized byte to
+      `1`. The current preserved corpus only covers the MPC3000 24-program
+      case, hence the present `0..23` validation range.
     
   - id: stereo_mix_source
     type: u1
