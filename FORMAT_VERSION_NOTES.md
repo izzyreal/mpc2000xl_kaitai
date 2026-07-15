@@ -53,7 +53,7 @@ Fresh July 2026 body-level validation:
 - practical interpretation for MPC3000 SND so far:
   - `0x01 0x02` is confirmed on hardware MPC3000 OS `3.11`
   - `0x01 0x02` is confirmed on MAME MPC3000 firmware `3.10`
-  - at least one header field inside that family (`unknown_2` in the current
+  - at least one header field inside that family (`hard_start_address` in the current
     provisional schema) varies between the hardware OS `3.11` probe and the
     MAME `3.10` rewrite of the same sample content
 
@@ -82,5 +82,5 @@ Known producers:
 Focused MAME 3.10 save-session findings:
 
 - header byte 19 is saved `Vol%` / level (`0x32`, `0x64`, `0xc8` for 50, 100, 200)
-- `unknown_2` increases by exactly `frame_count` on each save of the same sample
+- `hard_start_address` increases by exactly `frame_count` on each save of the same sample
 - `Soft st` / `Soft end` edits did not change the persisted payload in that save path

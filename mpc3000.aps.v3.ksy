@@ -54,6 +54,9 @@ seq:
   
   - id: record_live_mix_changes
     type: u1
+    doc: |
+      Saved `Record Live Changes` flag from the Mix Source / Auto Mix screen.
+      Roger Linn's notes define the visible boolean as `0 = yes`, `1 = no`.
 
   - id: center_pad_16_levels_if_param_tuning
     type: u1
@@ -78,6 +81,9 @@ seq:
 
   - id: effects_settings
     type: effects_settings
+    doc: |
+      Top-level delay/effects block. Roger Linn's notes state that this block is
+      meaningful when `effects_source = master`.
   
   - id: mixer_settings
     type: mixer_settings
@@ -85,7 +91,8 @@ seq:
     repeat-expr: 64
     doc: Real MPC3000 OS 3.11 empty APS evidence puts a 64-entry top-level
          mixer table here, despite Roger Linn's note reading like a single
-         master mixer record.
+         master mixer record. Roger Linn's notes clarify that these entries are
+         the master-level mixer settings used when `stereo_mix_source = master`.
 
   - id: programs
     type: program
@@ -231,6 +238,7 @@ types:
     seq:
       - id: effects_on
         type: b1
+        doc: Roger Linn's notes define `1 = on`, `0 = off`.
       - type: b7
       - type: u1
         doc: Unused
@@ -248,10 +256,13 @@ types:
         type: u1
       - id: delay_msecs_tap1
         type: u2
+        doc: Roger Linn's notes define the visible domain as 1..1486 ms.
       - id: delay_msecs_tap2
         type: u2
+        doc: Roger Linn's notes define the visible domain as 1..1486 ms.
       - id: delay_msecs_tap3
         type: u2
+        doc: Roger Linn's notes define the visible domain as 1..1486 ms.
       - size: 6
         doc: Unused
       - id: delay_feedback_tap1

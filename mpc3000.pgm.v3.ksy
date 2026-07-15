@@ -192,14 +192,27 @@ types:
           encoding is 0 = END and 1 = START.
       - id: filter_frequency
         type: u1
+        doc: Dynamic lowpass filter cutoff parameter from the Dynamic Filter
+             screen. The MPC3000 manual defines the visible range as 0..100,
+             where 0 is about 70 Hz and 100 places the filter fully out.
       - id: filter_resonance
         type: u1
+        doc: Dynamic lowpass filter resonance parameter from the Dynamic Filter
+             screen. The MPC3000 manual defines the visible range as 0..15.
       - id: filter_envel_attack
         type: u1
+        doc: Filter envelope attack parameter from the Dynamic Filter screen.
+             The MPC3000 manual defines 101 exponentially spaced values
+             representing 0..5000 ms.
       - id: filter_envel_decay
         type: u1
+        doc: Filter envelope decay parameter from the Dynamic Filter screen.
+             The MPC3000 manual defines 101 exponentially spaced values
+             representing 0..5000 ms.
       - id: filter_envel_amount
         type: u1
+        doc: Filter envelope amount parameter from the Dynamic Filter screen.
+             The MPC3000 manual defines the visible range as 0..100 percent.
       - id: veloc_mod_of_volume
         type: u1
       - id: veloc_mod_of_attack
@@ -208,6 +221,9 @@ types:
         type: u1
       - id: veloc_mod_of_filter_freq
         type: u1
+        doc: Velocity modulation of filter frequency (`Vel>Freq`) from the
+             Dynamic Filter screen. The MPC3000 manual defines the visible
+             range as 0..100 percent.
       - id: param
         type: u1
         enum: note_variation_type
