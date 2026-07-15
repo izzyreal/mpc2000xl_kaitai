@@ -1,6 +1,6 @@
 # MPC2000XL ALL Consumption Notes
 
-This note documents consumer-side rules for `mpc2000xl.all.ksy`.
+This note documents consumer-side rules for `mpc2000xl.all.v1.ksy`.
 
 The `.ksy` is authoritative for binary structure and field interpretation, but
 for `.ALL` it is not by itself a sufficient guide for building a correct

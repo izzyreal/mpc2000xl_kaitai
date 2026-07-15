@@ -29,7 +29,7 @@ What matters first is:
 - the current `mpc3000.snd.v2.ksy` models the `0x01 0x02` SND wrapper family
   and is confirmed on:
   - local hardware MPC3000 OS `3.11`
-  - MAME MPC3000 firmware `3.10`
+  - MPC3000 OS `3.10`
 
 Fresh July 2026 body-level validation:
 
@@ -77,7 +77,7 @@ If you are writing a loader:
 Known producers:
 
 - hardware MPC3000 OS 3.11
-- MAME MPC3000 firmware 3.10
+- MPC3000 OS 3.10
 
 Focused MAME 3.10 save-session findings:
 
