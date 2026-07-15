@@ -3,7 +3,7 @@ meta:
   file-extension: all
   bit-endian: le
   imports:
-    - mpc3000.seq.v3
+    - seq.v3
 
 # Shared `04 03` ALL family.
 #

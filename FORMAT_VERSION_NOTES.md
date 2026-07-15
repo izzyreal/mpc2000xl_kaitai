@@ -24,7 +24,7 @@ What matters first is:
 - earlier plain `mpc60` `2.12` probe artifacts point to
   - `SEQ` starting with `03 03`
   - `ALL` starting with `04 03`
-- the current `mpc3000.seq.v3.ksy` / `all.v3.ksy` model the `0x03`
+- the current `seq.v3.ksy` / `all.v3.ksy` model the `0x03`
   wrapper family
 - the current `mpc3000.snd.v2.ksy` models the `0x01 0x02` SND wrapper family
   and is confirmed on:
@@ -34,7 +34,7 @@ What matters first is:
 Fresh July 2026 body-level validation:
 
 - real `mpc60 2.12` raw-image extracts, sliced to their actual FAT file sizes,
-  parse cleanly with the existing `mpc3000.seq.v3` and `all.v3`
+  parse cleanly with the existing `seq.v3` and `all.v3`
   layouts
 - real `mpc60 2.12` and real MPC3000 `04 03` ALL files also confirm that
   `total_number_of_bytes_in_all_sequences` includes the embedded sequence

@@ -11,7 +11,7 @@
 #
 # Another important clarification: the body below is effectively a sequence-body
 # prototype. Standalone SEQ wrappers now live in `mpc60.seq.v2.ksy` and
-# `mpc60.seq.v3.ksy`, both importing `mpc60.seq.body.ksy`.
+# `seq.v3.ksy`, both importing `mpc60.seq.body.ksy`.
 
 meta:
   id: mpc60_all_v1

@@ -1,6 +1,6 @@
 # MPC3000 SEQ v3 Gap Audit
 
-This note tracks the path from a structurally aligned `mpc3000.seq.v3.ksy` to a
+This note tracks the path from a structurally aligned `seq.v3.ksy` to a
 gapless, high-confidence schema.
 
 ## Confirmed Baseline
@@ -432,5 +432,5 @@ Priority probes:
 ## Current Interpretation
 
 `SEQ v3` is a shared wrapper/version family observed in MPC3000 v3.10 and also
-in earlier MPC60 evidence. The product name in `mpc3000.seq.v3.ksy` is therefore
+in earlier MPC60 evidence. The product name in `seq.v3.ksy` is therefore
 provenance, not exclusivity.

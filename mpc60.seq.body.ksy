@@ -1,13 +1,13 @@
 meta:
   id: mpc60_seq_body
   imports:
-    - mpc3000.seq.v3
+    - seq.v3
   bit-endian: le
 
 # This body models the smaller `03 02` family observed on `mpc60scsi` 2.14.
 # It is not a generic body for every MPC60-family SEQ wrapper:
 # fresh July 2026 validation showed that plain MPC60 2.12 `03 03` files instead
-# line up with the existing `mpc3000.seq.v3` layout.
+# line up with the existing `seq.v3` layout.
 #
 # Fresh July 2026 validation against real `MPC60_v214_SEQ01.SEQ` indicates
 # that this body shares several reduced-MPC3000-style primitives:
