@@ -6,7 +6,7 @@ meta:
 # This body models the smaller `04 02` family observed on `mpc60scsi` 2.14.
 # It is not a generic body for every MPC60-family ALL wrapper:
 # fresh July 2026 validation showed that plain MPC60 2.12 `04 03` files instead
-# line up with the existing `mpc3000.all.v3` layout.
+# line up with the existing `all.v3` layout.
 
 # Fresh July 2026 validation against real `MPC60_v214_ALL_SEQS.ALL` indicates
 # that the embedded sequence body here shares the same reduced-MPC3000-style

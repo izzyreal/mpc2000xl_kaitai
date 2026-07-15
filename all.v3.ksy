@@ -1,14 +1,19 @@
 meta:
-  id: mpc3000_all_v3
+  id: all_v3
   file-extension: all
   bit-endian: le
   imports:
     - mpc3000.seq.v3
 
-# Naming note:
-# `mpc3000` in this filename is provenance-oriented. The `0x03` ALL wrapper
-# family appears to be firmware-specific rather than strictly model-exclusive;
-# earlier MPC60 2.12 evidence points at `04 03` as well.
+# Shared `04 03` ALL family.
+#
+# Known producers currently evidenced:
+# - MPC3000
+# - MPC60 firmware 2.12
+#
+# Current evidence shows these files are structurally indistinguishable at the
+# file-format level, so the canonical filename is family/version-oriented
+# rather than model-oriented.
     
 seq:
   - id: all_file_header
@@ -39,7 +44,8 @@ types:
       contents: [0x04]
     
     - id: file_version
-      # Wrapper/version byte `0x03` is not assumed to be MPC3000-exclusive.
+      # Wrapper/version byte `0x03` is currently understood as a shared
+      # ALL family rather than a model-exclusive marker.
       contents: [0x03]
       
     - id: total_number_of_bytes_in_all_sequences
