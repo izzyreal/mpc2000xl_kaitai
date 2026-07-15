@@ -1,12 +1,18 @@
 meta:
-  id: mpc3000_seq_v3
+  id: seq_v3
   file-extension: seq
   bit-endian: le
 
-# Naming note:
-# `mpc3000` in this filename is provenance-oriented. The `0x03` wrapper family
-# appears to be firmware-specific rather than strictly model-exclusive; earlier
-# MPC60 2.12 evidence points at the same `03 03` SEQ wrapper.
+# Shared `03 03` SEQ family.
+#
+# Known producers currently evidenced:
+# - MPC3000 OS 3.10
+# - MPC3000 OS 3.11
+# - MPC60 firmware 2.12
+#
+# Current evidence shows these files are structurally indistinguishable at the
+# file-format level, so the canonical filename is family/version-oriented
+# rather than model-oriented.
 
 enums:
   controller:
