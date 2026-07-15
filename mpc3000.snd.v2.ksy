@@ -6,21 +6,21 @@ meta:
   bit-endian: le
 
 doc: |
-  Provisional parser for MPC3000 SND files whose first two bytes are 0x01 0x02.
+  WIP parser for MPC3000 SND files whose first two bytes are 0x01 0x02.
 
-  This definition is currently based on one hardware MPC3000 sample:
+  This definition is currently based on one MPC3000 sample:
   SOUND017.SND, recorded as a two-second mono sample. That file is confirmed in
-  the local hardware MPC3000 OS 3.11 corpus:
+  the local MPC3000 OS 3.11 corpus:
 
   /Users/izmar/projects/VMPC2000XL/reverse_engineer/mpc3000-os3.11/empty/SOUND017.SND
 
   The known-good interpretation for that file is a 38-byte header followed by
   signed 16-bit little-endian PCM at 44100 Hz.
 
-  Known producers of this 0x01 0x02 family currently include:
+  Known producers currently evidenced for this 0x01 0x02 family:
 
-  - hardware MPC3000 OS 3.11
-  - MAME MPC3000 firmware 3.10
+  - MPC3000 OS 3.11
+  - MPC3000 OS 3.10
 
   A focused MAME MPC3000 3.10 save-session probe established the following:
 
@@ -35,11 +35,11 @@ doc: |
   - In that same save path, editing `Soft st` to `000.500.00` and `Soft end` to
     `002.500.00` did not change the persisted payload or the bytes currently
     mapped as `start`, `end`, and `frame_count`. So those fields remain
-    provisional, and the save path appears to flatten or ignore those edit
+    still WIP, and the save path appears to flatten or ignore those edit
     parameters.
 
   Field names other than file_id, file_version, name, level, and sample_data are
-  still provisional.
+  still WIP.
 
 seq:
   - id: file_id
@@ -64,13 +64,13 @@ seq:
 
   - id: start
     type: u4
-    doc: Provisional. Observed as 0 in SOUND017.SND and unchanged in a MAME
+    doc: WIP. Observed as 0 in SOUND017.SND and unchanged in an MPC3000
          3.10 save-session probe even when `Soft st` was edited to
          `000.500.00`.
 
   - id: end
     type: u4
-    doc: Provisional. Observed as 88200 in SOUND017.SND and unchanged in a MAME
+    doc: WIP. Observed as 88200 in SOUND017.SND and unchanged in an MPC3000
          3.10 save-session probe even when `Soft end` was edited.
 
   - id: frame_count

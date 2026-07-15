@@ -3,6 +3,12 @@ meta:
   file-extension: SET
   bit-endian: le
 
+# MPC60 SET family.
+#
+# Known producers currently evidenced:
+# - MPC60 `.SET` files preserved in the local corpus
+# - MPC60 firmware 2.14 `.SET` files and imports exercised during mapping
+
 seq:
 - id: file_id
   contents: [0x02]

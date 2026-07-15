@@ -1,10 +1,18 @@
 ### WIP ###
 
+# WIP historical `04 01` ALL wrapper.
+#
+# Known producers currently evidenced:
+# - no direct, firmly-attributed producer has been re-established yet
+#
+# This schema is retained as an early WIP mapping pending stronger file
+# provenance and fresh validation.
+
 # Historical note:
-# this schema name is provisional and predates later wrapper-version evidence.
+# this schema name is WIP and predates later wrapper-version evidence.
 # Newer probes suggest MPC60-family ALL/SEQ wrapper bytes vary with firmware
 # rather than mapping cleanly to a single model-level format:
-#   - mpc60scsi 2.14: ALL `04 02`, SEQ `03 02`
+#   - MPC60 firmware 2.14: ALL `04 02`, SEQ `03 02`
 #   - earlier plain mpc60 2.12 evidence: ALL `04 03`, SEQ `03 03`
 # So this file should be read as an early WIP mapping, not as the settled final
 # statement on "the MPC60 ALL format".

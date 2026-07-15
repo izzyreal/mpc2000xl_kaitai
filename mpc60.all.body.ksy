@@ -3,7 +3,7 @@ meta:
   imports:
     - mpc60.seq.body
 
-# This body models the smaller `04 02` family observed on `mpc60scsi` 2.14.
+# This body models the smaller `04 02` family observed on MPC60 firmware 2.14.
 # It is not a generic body for every MPC60-family ALL wrapper:
 # fresh July 2026 validation showed that plain MPC60 2.12 `04 03` files instead
 # line up with the existing `all.v3` layout.

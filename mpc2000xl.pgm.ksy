@@ -2,6 +2,14 @@ meta:
   id: mpc2000xl_pgm
   file-extension: pgm
 
+# MPC2000XL PGM family.
+#
+# Known producers currently evidenced:
+# - MPC2000XL `.PGM` files preserved in the local corpus
+#
+# Exact producing OS versions have not yet been exhaustively tracked for every
+# preserved file in this family.
+
 enums:
   sound_generation_mode:
     0: normal

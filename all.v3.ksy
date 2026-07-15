@@ -8,7 +8,7 @@ meta:
 # Shared `04 03` ALL family.
 #
 # Known producers currently evidenced:
-# - hardware MPC3000 OS 3.11
+# - MPC3000 OS 3.11
 # - MPC3000 OS 3.10
 # - MPC60 firmware 2.12
 #

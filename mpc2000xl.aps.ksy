@@ -4,6 +4,14 @@ meta:
   file-extension: aps
   imports: mpc2000xl.pgm
 
+# MPC2000XL APS family.
+#
+# Known producers currently evidenced:
+# - MPC2000XL `.APS` files preserved in the local corpus
+#
+# Exact producing OS versions have not yet been exhaustively tracked for every
+# preserved file in this family.
+
 enums:
   no_yes:
     0: no

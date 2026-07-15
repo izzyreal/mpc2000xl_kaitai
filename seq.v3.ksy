@@ -6,8 +6,8 @@ meta:
 # Shared `03 03` SEQ family.
 #
 # Known producers currently evidenced:
-# - MPC3000 OS 3.10
 # - MPC3000 OS 3.11
+# - MPC3000 OS 3.10
 # - MPC60 firmware 2.12
 #
 # Current evidence shows these files are structurally indistinguishable at the

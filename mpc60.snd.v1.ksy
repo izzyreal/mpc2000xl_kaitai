@@ -8,13 +8,17 @@ meta:
 doc: |
   Parser for MPC60 SND files whose first two bytes are 0x01 0x01.
 
-  This definition is based on hardware MPC60 SND files plus a native MAME MPC60
-  2.14 ROCK.SET export corpus. The header layout and packed sample byte count
+  This definition is based on MPC60 SND files plus an MPC60 firmware 2.14
+  ROCK.SET export corpus. The header layout and packed sample byte count
   are supported by all currently preserved native MPC60 SND files. The packed
   12-bit sample-code layout matches the MPC60 SET sample storage layout; the
   stateful conversion from those codes to imported 16-bit PCM is documented
   separately in MPC60_12BIT_SAMPLE_DECODER.md rather than expressed directly in
   this schema.
+
+  Known producers currently evidenced for this 0x01 0x01 family:
+  - MPC60 `.SND` files preserved in the local corpus
+  - MPC60 firmware 2.14 SET-to-SND exports preserved in codex-mame
 
   Known evidence:
   - SOUND002.SND: 6039 bytes total, 4000 samples, 6000 sample bytes

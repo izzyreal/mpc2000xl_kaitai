@@ -3,6 +3,15 @@ meta:
   file-extension: all
   bit-endian: le
 
+# MPC2000XL ALL v1 family.
+#
+# Known producers currently evidenced:
+# - MPC2000XL `.ALL` files preserved in the local corpus
+#
+# Exact producing OS versions have not yet been exhaustively tracked for every
+# preserved file in this family, but the wrapper/body layout is established from
+# real-device files and consumer validation work.
+
 types:
   location:
     seq:
