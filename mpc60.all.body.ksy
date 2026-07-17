@@ -3,14 +3,10 @@ meta:
   imports:
     - mpc60.seq.body
 
-# This body models the smaller `04 02` family observed on MPC60 firmware 2.14.
-# It is not a generic body for every MPC60-family ALL wrapper:
-# fresh July 2026 validation showed that plain MPC60 2.12 `04 03` files instead
-# line up with the existing `all.v3` layout.
-
-# Fresh July 2026 validation against real `MPC60_v214_ALL_SEQS.ALL` indicates
-# that the embedded sequence body here shares the same reduced-MPC3000-style
-# primitives as `mpc60_seq_body`.
+# Known producers currently evidenced:
+# - MPC60 firmware 2.05
+# - MPC60 firmware 2.12
+# - MPC60 firmware 2.14
 #
 # Important container rule confirmed against both sentinel-only and song-bearing
 # real files:

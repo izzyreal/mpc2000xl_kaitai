@@ -51,7 +51,7 @@ word1 = byte2 | ((byte1 & 0xf0) << 4)
 ```
 
 This is the natural little-bit-endian `b12` interpretation used by
-`mpc60.set.v1.ksy`.
+`mpc60.set.v0.ksy`.
 
 ## Converter Input Word
 

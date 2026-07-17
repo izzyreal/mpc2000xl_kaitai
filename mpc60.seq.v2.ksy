@@ -4,10 +4,12 @@ meta:
   imports:
     - mpc60.seq.body
 
-# Observed on freshly rechecked MPC60 firmware 2.14:
+# Observed on freshly rechecked MPC60 firmware 2.05, 2.12, and 2.14:
 #   SEQ wrapper bytes are `03 02`
 #
 # Known producers currently evidenced:
+# - MPC60 firmware 2.05
+# - MPC60 firmware 2.12
 # - MPC60 firmware 2.14
 #
 # Naming note:

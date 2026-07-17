@@ -4,8 +4,6 @@ meta:
   endian: le
   bit-endian: le
 
-# Shared `07 00` PGM family currently evidenced on MPC3000.
-#
 # Known producers currently evidenced:
 # - MPC3000 OS 3.11
 # - MPC3000 OS 3.10

@@ -5,38 +5,10 @@ meta:
   endian: le
   bit-endian: le
 
-doc: |
-  Parser for MPC3000 SND files whose first two bytes are 0x01 0x02.
 
-  This definition is currently based on one MPC3000 sample:
-  SOUND017.SND, recorded as a two-second mono sample. That file is confirmed in
-  the local MPC3000 OS 3.11 corpus:
-
-  /Users/izmar/projects/VMPC2000XL/reverse_engineer/mpc3000-os3.11/empty/SOUND017.SND
-
-  The known-good interpretation for that file is a 38-byte header followed by
-  signed 16-bit little-endian PCM at 44100 Hz.
-
-  Known producers currently evidenced for this 0x01 0x02 family:
-
-  - MPC3000 OS 3.11
-  - MPC3000 OS 3.10
-
-  A focused MPC3000 OS 3.10 save-session probe established the following:
-
-  - `level` is the saved Vol% byte. Files saved with Vol% 50, 100, and 200
-    encoded `0x32`, `0x64`, and `0xc8` respectively.
-  - Roger Linn's file-format notes identify bytes 20-37 as:
-    - tuning
-    - stereo flag
-    - soft start
-    - soft end
-    - number of samples
-    - hard start address within sound memory
-  - The hard-start address field is not a stable intrinsic property of the
-    sample. Across repeated saves of the same 88200-frame sample, it increased
-    by exactly `frame_count` each time: `0x000107d0`, `0x00026058`,
-    `0x0003b8e0`, `0x00051168`, `0x000669f0`, `0x0007c278`.
+# Known producers currently evidenced:
+# - MPC3000 OS 3.11
+# - MPC3000 OS 3.10
 
 seq:
   - id: file_id
@@ -57,13 +29,11 @@ seq:
 
   - id: tune
     type: s1
-    doc: Sound tuning in 10-cent units. Roger Linn's notes define the visible
-         domain as -120..60.
+    doc: Sound tuning in 10-cent units.
 
   - id: stereo
     type: u1
     enum: stereo_flag
-    doc: Stereo flag. Roger Linn's notes define 1 as stereo and 0 as mono.
 
   - id: soft_start
     type: u4
@@ -75,8 +45,7 @@ seq:
 
   - id: frame_count
     type: u4
-    doc: Number of samples. In SOUND017.SND this is 88200, and
-         `38 + frame_count * 2` equals the file size.
+    doc: Number of samples.
 
   - id: hard_start_address
     type: u4

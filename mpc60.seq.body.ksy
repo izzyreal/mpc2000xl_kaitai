@@ -4,17 +4,10 @@ meta:
     - seq.v3
   bit-endian: le
 
-# This body models the smaller `03 02` family observed on MPC60 firmware 2.14.
-# It is not a generic body for every MPC60-family SEQ wrapper:
-# fresh July 2026 validation showed that plain MPC60 2.12 `03 03` files instead
-# line up with the existing `seq.v3` layout.
-#
-# Fresh July 2026 validation against `MPC60_v214_SEQ01.SEQ` indicates
-# that this body shares several reduced-MPC3000-style primitives:
-# - full 24-byte track headers
-# - explicit tempo-change records
-# - an event stream whose byte length is governed directly by
-#   `event_stream_length_in_bytes`
+# Known producers currently evidenced:
+# - MPC60 firmware 2.05
+# - MPC60 firmware 2.12
+# - MPC60 firmware 2.14
 
 enums:
   off_on:

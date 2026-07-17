@@ -1,19 +1,19 @@
 meta:
-  id: mpc60_set_v1
+  id: mpc60_set_v0
   file-extension: SET
   bit-endian: le
 
-# Known producers evidenced:
-# - MPC60 firmware 2.05
-# - MPC60 firmware 2.12
-# - MPC60 firmware 2.14
+# MPC60 SET family with wrapper bytes `02 00`.
+#
+# No known producers currently evidenced, but
+# 0x02 0x00 is encountered in factory SET files that make their rounds on the web.
 
 seq:
 - id: file_id
   contents: [0x02]
   
 - id: file_format_version
-  contents: [0x01]
+  contents: [0x00]
 
 - id: total_number_of_sample_words
   type: u3le
@@ -50,11 +50,11 @@ seq:
 - id: double_play_assignments
   size: 32
 
-  # Present in this layout; exact native MPC60 behavior is still being mapped.
+  # Version 2 only
 - id: velocity_switch_on_off_for_each_double_play_assign
   size: 32
 
-  # Present in this layout; firmware 2.14 resaves STUDIO with all values set to 64.
+  # Version 2 only
 - id: velocity_switch_threshold_value_for_each_double_play_assign
   size: 32
   

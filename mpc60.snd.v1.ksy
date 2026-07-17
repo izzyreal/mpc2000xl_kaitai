@@ -5,32 +5,10 @@ meta:
   endian: le
   bit-endian: le
 
-doc: |
-  Parser for MPC60 SND files whose first two bytes are 0x01 0x01.
-
-  This definition is based on MPC60 SND files plus an MPC60 firmware 2.14
-  ROCK.SET export corpus. The header layout and packed sample byte count
-  are supported by all currently preserved native MPC60 SND files. The packed
-  12-bit sample-code layout matches the MPC60 SET sample storage layout; the
-  stateful conversion from those codes to imported 16-bit PCM is documented
-  separately in MPC60_12BIT_SAMPLE_DECODER.md rather than expressed directly in
-  this schema.
-
-  Known producers currently evidenced for this 0x01 0x01 family:
-  - MPC60 `.SND` files preserved in the local corpus
-  - MPC60 firmware 2.14 SET-to-SND exports preserved in codex-mame
-
-  Known evidence:
-  - SOUND002.SND: 6039 bytes total, 4000 samples, 6000 sample bytes
-  - SOUND003.SND: 120039 bytes total, 80000 samples, 120000 sample bytes
-  - 17 native MAME MPC60 2.14 ROCK.SET exports preserved in codex-mame
-  - all imply a 39-byte header and 12-bit packed sample storage
-  - offsets 0x21..0x25 are zero in all 42 preserved MPC60 SND files checked
-
-  The MPC60 v3.10 manual describes SND contents as sound name, sample data,
-  tuning, volume, soft start, and soft end. Native 2.14 SET-to-SND exports also
-  show that SET-only fields such as pitch factor, attack rate, mix/pan, output,
-  echo, and sound characteristics are not copied into standalone SND headers.
+# Known producers evidenced from saved files:
+# - MPC60 firmware 2.05
+# - MPC60 firmware 2.12
+# - MPC60 firmware 2.14
 
 seq:
   - id: file_id

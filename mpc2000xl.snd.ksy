@@ -3,13 +3,8 @@ meta:
   file-extension: SND
   bit-endian: le
 
-# MPC2000XL SND family.
-#
 # Known producers currently evidenced:
-# - MPC2000XL `.SND` files preserved in the local corpus
-#
-# Exact producing OS versions have not yet been exhaustively tracked for every
-# preserved file in this family.
+# - MPC2000XL OS 1.20
 
 seq:
   - id: magic

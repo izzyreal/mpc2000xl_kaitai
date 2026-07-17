@@ -4,8 +4,6 @@ meta:
   endian: le
   title: MPC60/3000 APS File Format (Version 3)
 
-# Shared `0A 00` APS family currently evidenced on MPC3000.
-#
 # Known producers currently evidenced:
 # - MPC3000 OS 3.11
 # - MPC3000 OS 3.10

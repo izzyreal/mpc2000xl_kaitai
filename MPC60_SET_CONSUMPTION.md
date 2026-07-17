@@ -1,7 +1,16 @@
 # MPC60 SET Consumption Notes
 
-This note documents consumer-side rules for `mpc60.set.v1.ksy` when the goal is
-to emulate MPC2000XL `.SET` import behavior.
+This note documents consumer-side rules for `mpc60.set.v0.ksy` and
+`mpc60.set.v1.ksy` when the goal is to emulate MPC2000XL `.SET` import
+behavior.
+
+Observed wrapper signatures:
+
+- `02 00`: factory/web SET corpus, with no evidenced producing firmware yet.
+- `02 01`: produced by MPC60 firmware 2.05, 2.12, and 2.14.
+
+For MPC2000XL import, both versions use the same consumer projection described
+below.
 
 The schema is authoritative for the binary structure of an MPC60 `.SET` file,
 but the file does not by itself describe how an MPC2000XL should project that
@@ -25,6 +34,20 @@ What belongs in the consumer:
 - what `CLEAR` versus `LOAD` means for existing in-memory programs and sounds
 
 ## Important SET-Specific Rules
+
+### 0. Some MPC60 global mixer/hihat settings are not SET data
+
+On MPC60 firmware 2.14, changing the following UI fields and saving the same
+loaded SET under different names produced byte-identical SET files:
+
+- `HiHat Decay Switch Thresholds` Closed/Medium and Medium/Open
+- hihat decay controller number
+- `Function of '16 levels'`
+- `Stereo Mix` and `Echo Mix` mixer modes
+- `Rcrd live chngs` for those mixer modes
+
+Those fields should therefore not be inferred from SET v1. They likely belong to
+parameter/global state rather than the SET file.
 
 ### 1. `sound_map` is MPC60-pad to directory-entry index
 
@@ -104,14 +127,54 @@ For example:
 - `ROCK.SET` -> program name `ROCK`
 - `STUDIO.SET` -> program name `STUDIO`
 
-### 6. Current v1 sample-rate assumption is 40000 Hz
+### 6. MPC2000XL import presents sounds as 44100 Hz with -17 tune
 
-Current import behavior in `editables/mpc` constructs imported sounds at
-`40000` Hz.
+Real MPC2000XL v1.20 imports `.SET` sounds with sound metadata sample rate
+`44100` and sound tune `-17`, even though MPC60 source material is understood as
+40 kHz. Current `editables/mpc` mirrors that metadata behavior without
+resampling the decoded sample data.
 
-That matches current understanding for the MPC60 `.SET` material exercised so
-far, but this is still a consumer assumption worth re-checking if broader MPC60
-sample corpora reveal per-sound or per-set variability.
+### 7. Note tune comes from `pitch_factor`
+
+For whole-SET import, each assigned target note should derive its note-parameter
+tune from the source sound directory entry's `pitch_factor`:
+
+```text
+round(120 * log2(pitch_factor / 4096))
+```
+
+`4096` maps to `0`; for example `STUDIO.SET` yields roughly `+39` for
+`TOM#1_HI`, `+36` for `TOM#1_LO`, and `+21` for one `CRASH_#1` assignment.
+
+### 8. Stereo mixer data should follow the imported sound
+
+For MPC2000XL-style whole-SET import, the mixer settings associated with a
+source sound should remain associated with that sound after it is assigned to a
+2000XL program note. Use the assigned sound directory entry's
+`requested_stereo_mix_volume` and `requested_stereo_mix_pan` fields for the
+resulting note-parameter stereo mixer.
+
+These MPC60 values are 7-bit style ranges and need conversion to the
+MPC2000XL's 0..100 mixer range.
+
+### 9. Imported hihat uses DECAY switch, slider assignment, and mute assigns
+
+Real MPC2000XL v1.20 imports the closed hihat target note as a three-layer
+`DECAY SWITCH`: the closed hihat remains the base note, optional note A is the
+medium hihat, and optional note B is the open hihat. The default import
+thresholds are lower `14` and upper `42`.
+
+The same closed hihat target note also gets note-variation slider assignment
+enabled for `DECAY`, low range `12`, and high range `45`. For the default
+conversion table this is note `42` / pad `A03`. The closed hihat target note
+gets mute assignments to mute the imported medium and open hihat target notes
+(`82` / `A04` and `46` / `A07` with the default conversion table).
+
+This has so far been observed for `STUDIO.SET` and `SYNTH.SET`. A byte-level
+probe on MPC60 firmware 2.14 showed that changing the MPC60 hihat-decay global
+threshold/controller screen values did not change the saved SET file, so this
+should be treated as MPC2000XL import policy unless later evidence shows a SET
+field that controls it.
 
 ## Practical Guidance For Consumers
 
@@ -123,7 +186,14 @@ If you want MPC2000XL-like `.SET` import from your own app model:
 4. Map imported sounds into a created program using the chosen target-note
    table.
 5. Implement `CLEAR` versus `LOAD` as consumer memory-policy choices.
-6. If you emulate the conversion-table UI, resolve displayed pad names through
+6. Present imported sounds as 44100 Hz with sound tune -17 for MPC2000XL-style import.
+7. Derive imported note tune from each assigned directory entry's `pitch_factor`.
+8. Import stereo mixer level/pan from the assigned sound directory entry.
+9. Import the closed-hihat target note as `DECAY SWITCH`, optional notes
+   medium/open, thresholds `14` and `42`, and mute assigns to medium/open.
+10. Assign the note-variation slider to the imported closed-hihat target note,
+   with parameter `DECAY` and range `12..45`.
+11. If you emulate the conversion-table UI, resolve displayed pad names through
    the current DRUM1 program, not through a global note map.
 
 ## Confidence Level

@@ -3,16 +3,10 @@ meta:
   file-extension: seq
   bit-endian: le
 
-# Shared `03 03` SEQ family.
-#
 # Known producers currently evidenced:
 # - MPC3000 OS 3.11
 # - MPC3000 OS 3.10
 # - MPC60 firmware 2.12
-#
-# Current evidence shows these files are structurally indistinguishable at the
-# file-format level, so the canonical filename is family/version-oriented
-# rather than model-oriented.
 
 enums:
   controller:

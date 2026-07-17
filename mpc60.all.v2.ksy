@@ -4,16 +4,10 @@ meta:
   imports:
     - mpc60.all.body
 
-# Observed on freshly rechecked MPC60 firmware 2.14:
-#   ALL wrapper bytes are `04 02`
-#
 # Known producers currently evidenced:
+# - MPC60 firmware 2.05
+# - MPC60 firmware 2.12
 # - MPC60 firmware 2.14
-#
-# Naming note:
-# the `v2` here is the wrapper/version byte, not a claim that the body below is
-# generic for all MPC60-family files. The broader `0x03` family currently
-# appears to be shared with MPC3000 v3. See FORMAT_VERSION_NOTES.md.
 
 seq:
 - id: file_id

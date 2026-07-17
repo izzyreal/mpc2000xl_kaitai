@@ -5,13 +5,8 @@ meta:
   imports:
     - standard_midi_file_with_running_status
 
-# MPC2000XL-flavoured MID export family.
-#
 # Known producers currently evidenced:
-# - MPC2000XL `.MID` files preserved in the local corpus
-#
-# The embedded sequencer meta block carries the string `MPC2000XL 1.00  ` for
-# the currently preserved family.
+# - MPC2000XL OS 1.20
     
 types:
   sequencer:
