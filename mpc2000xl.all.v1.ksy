@@ -515,9 +515,10 @@ types:
           max: 127
       - size: 1
 
+  # Known Akai mixer SysEx payload, excluding ALL framing and padding.
   mixer_event:
     seq:
-      - size: 3
+      - contents: [0xF0, 0x47, 0x00, 0x44, 0x45]
       - id: param
         type: u1
         enum: mixer_event_param
@@ -528,17 +529,21 @@ types:
         valid:
           min: 0
           max: 100
-      - size: 2
+      - contents: [0xF7]
 
   exclusive_event:
     seq:
-      - size: 3
+      # The event header occupies 5 bytes; this length completes its 8-byte
+      # segment. The complete payload follows, padded to an 8-byte boundary.
+      - id: payload_length
+        type: b24
       - id: bytes
-        size: 2
-      - id: mixer
-        type: mixer_event
-        if: bytes == [ 0xF0, 0x47]
-      - size: 14
+        size: payload_length
+      - id: padding
+        size: (8 - payload_length % 8) % 8
+      # Preserve the closing segment, including its tick/track bytes.
+      - id: closing_segment
+        size: 8
 
   event:
     # We start off by collecting some essentials, while performing terminator

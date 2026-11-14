@@ -69,6 +69,11 @@ Sequence-body count:
 - SysEx event: `3`
 - mixer event: `4`
 
+These SysEx counts describe the current serializer's two-byte runtime
+representation, not arbitrary-length SysEx in input files. For a payload of
+`L` bytes, its physical sequence-body storage is `2 + ceil(L / 8)` segments:
+one header segment, the padded payload, and one closing segment.
+
 Using only one count for both purposes produces incorrect `.ALL` output.
 
 ### 3. Empty 8-byte `sequence` records are structural separators
@@ -118,6 +123,20 @@ One concrete example encountered during integration:
 
 So the consumer's projection from parsed Kaitai object to runtime state must be
 reviewed independently from the schema.
+
+### 6. SysEx payloads are variable-length
+
+After the ordinary 5-byte event prefix, a 24-bit little-endian field gives the
+SysEx payload length. Read that complete payload, then padding to an 8-byte
+boundary, then an 8-byte closing segment. Preserve both padding and closing
+bytes when rewriting a parsed file.
+
+The known mixer payload is 9 bytes: `F0 47 00 44 45`, parameter, pad, value,
+`F7`. Other messages beginning with `F0 47` are not necessarily mixer events.
+
+The Kaitai model preserves complete payloads. VMPC's current sequencer runtime
+still stores only two ordinary SysEx bytes; loading into that runtime and
+saving again is therefore not a lossless operation for longer messages.
 
 ## Practical Guidance For Consumers
 
