@@ -130,9 +130,10 @@ seq:
   - id: sound_count
     type: u2le
     
+  # Fixed-width raw name fields preserve bytes after the NUL terminator.
+  # Consumers decode only the prefix before NUL as ASCII. A leading NUL
+  # denotes an empty sound-table entry (an OFF sentinel in some library PGMs).
   - id: sound_names
-    type: str
-    encoding: ASCII
     repeat: expr
     repeat-expr: sound_count
     size: 17
